@@ -30,8 +30,8 @@ namespace ITBOX
            public float Y { get; private set; }
             public void MathPosition(Vector2 Position,Vector2 Size,bool IsDown,bool IsLeft)
             {
-                X =IsLeft ? Position.X + Size.X /2 : Position.X - Size.X /2;
-                Y = IsDown ? Position.Y + Size.Y /2 : Position.Y - Size.Y /2;
+                X =IsLeft ? Position.X + Size.X * (Size.X/2) / 100 : Position.X - Size.X * (Size.X / 2) / 100;
+                Y = IsDown ? Position.Y + Size.Y * (Size.X / 2) / 100 : Position.Y - Size.Y * (Size.X / 2) / 100;
                 RoundXY();
             }
             private void RoundXY()
