@@ -9,5 +9,5 @@ void
 main()
 {
 	vec2 flipped_texcoord = vec2(f_texcoord.x, f_texcoord.y);
-    outputColor = texture(maintexture, flipped_texcoord);
+    outputColor = vec4(1,1,1,1);
 }

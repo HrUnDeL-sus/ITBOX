@@ -17,6 +17,9 @@
     <None Update="Entities\box.entity">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Entities\box2.entity">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Entities\player.entity">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

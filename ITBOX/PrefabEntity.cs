@@ -57,7 +57,7 @@ namespace ITBOX
                
             }
         }
-        public dynamic? GetComponent<T>()
+        public dynamic GetComponent<T>()
         {
             return _components.Find((t)=>(t is T));
         }
@@ -93,11 +93,8 @@ namespace ITBOX
             Transform transform = (GetComponent<Transform>() as Transform);
             if (transform!=null)
             {
-                return Matrix4.CreateTranslation(new Vector3(transform.Position.X, transform.Position.Y, transform.Position.Z)) *
-                Matrix4.CreateScale(new Vector3(transform.Scale.X, transform.Scale.Y, transform.Scale.Z)) *
-                Matrix4.CreateRotationX(MathHelper.DegreesToRadians(transform.Rotate.X)) *
-                Matrix4.CreateRotationY(MathHelper.DegreesToRadians(transform.Rotate.Y)) *
-                Matrix4.CreateRotationZ(MathHelper.DegreesToRadians(transform.Rotate.Z));
+                return Matrix4.CreateTranslation(transform.Position) *
+                Matrix4.CreateScale(transform.Scale);
             }
             return Matrix4.Zero;
         }
@@ -111,16 +108,14 @@ namespace ITBOX
         public void Rendering()
         {
             ActivateMethodsInScripts();
+           
             GL.Enable(EnableCap.DepthTest);
             GL.Enable(EnableCap.Texture2D);
             GL.Enable(EnableCap.AlphaTest);
-            GL.Enable(EnableCap.LineSmooth); // This is Optional 
-            GL.Enable(EnableCap.Normalize);  // This is critical to have
-            GL.Enable(EnableCap.RescaleNormal);
             GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferObject);
             GL.BufferData(BufferTarget.ArrayBuffer, (IntPtr)(_myEntity.GetVertex().Length * Vector3.SizeInBytes), _myEntity.GetVertex(), BufferUsageHint.StaticDraw);
             GL.BindVertexArray(_vertexArrayObject);
-            GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, true, 0, 0);
+            GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 0, 0);
             GL.EnableVertexAttribArray(0);
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, _elementBufferObject);
             GL.BufferData(BufferTarget.ElementArrayBuffer, (IntPtr)(_myEntity.GetIndices().Length * sizeof(uint)), _myEntity.GetIndices(), BufferUsageHint.StaticDraw);
@@ -137,8 +132,8 @@ namespace ITBOX
            
             GL.UniformMatrix4(GL.GetUniformLocation(MapManager.GetShader(0).Handle, "all"), false, ref result);
              
-            GL.DrawElements(BeginMode.Triangles, _myEntity.GetIndices().Length, DrawElementsType.UnsignedInt, 0);
-            GL.DisableVertexAttribArray(0);
+            GL.DrawElements(BeginMode.TriangleStrip, _myEntity.GetIndices().Length, DrawElementsType.UnsignedInt, 0);
+           GL.DisableVertexAttribArray(0);
             GL.DisableVertexAttribArray(GL.GetAttribLocation(MapManager.GetShader(0).Handle, "texcoord"));
         }
     }

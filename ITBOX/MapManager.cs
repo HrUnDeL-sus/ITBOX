@@ -191,15 +191,15 @@ namespace ITBOX
             {
                 _entitiesOnScene = prefabEntities;
                 Name = name;
-                ortho = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45.0f), 1, 0.1f, 100.0f);
+                ortho = Matrix4.CreateOrthographicOffCenter(-_size, _size, -_size, _size, 1, -1);
             }
             public void Rendering()
             {
                 foreach (var prefabEntity in _entitiesOnScene)
                 {
-                    prefabEntity.UpdateBoxCollider();
+                    
                     prefabEntity.Rendering();
-                   
+                    prefabEntity.UpdateBoxCollider();
                 }
             }
             

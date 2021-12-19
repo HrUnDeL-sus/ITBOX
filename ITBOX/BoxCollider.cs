@@ -30,13 +30,14 @@ namespace ITBOX
            public float Y { get; private set; }
             public void MathPosition(Vector2 Position,Vector2 Size,bool IsDown,bool IsLeft)
             {
-                X =IsLeft ? Position.X + Size.X * (Size.X/2) / 100 : Position.X - Size.X * (Size.X / 2) / 100;
-                Y = IsDown ? Position.Y + Size.Y * (Size.X / 2) / 100 : Position.Y - Size.Y * (Size.X / 2) / 100;
+                 X =IsLeft ? Position.X - Size.X/2: Position.X + Size.X / 2;
+                Y = IsDown ? Position.Y - Size.Y/2 : Position.Y + Size.Y/2;
                 RoundXY();
             }
             private void RoundXY()
             {
-              
+                X = (float)Math.Round(X, 2);
+                Y = (float)Math.Round(Y, 2);
             }
         }
         public  Vector2 Size { get; private set; }
@@ -52,6 +53,7 @@ namespace ITBOX
         {
             //   Size = new Vector2((size.X*(size.X*5/100))/CHANGE_SIZE_VALUE, (size.Y*(size.Y * 5 / 100)) / CHANGE_SIZE_VALUE);
             Size = new Vector2(size.X, size.Y);
+            Console.WriteLine("{0} {1}", Size.X, Size.Y);
             AllBoxColliders.Add(this);
             StateChangeSize = StateChangeSizeCollider.Change;
         }
@@ -124,16 +126,29 @@ namespace ITBOX
                             }
                             break;
                         case Collision.Down:
-                            hasCollision = (_rightDownPoint.Y <= item._rightUpPoint.Y && _rightDownPoint.Y >= item._rightDownPoint.Y &&
-                              (_rightUpPoint.X <= item._rightUpPoint.X && _rightUpPoint.X >= item._leftDownPoint.X
-                              ||
-                              item._rightUpPoint.X <= _rightUpPoint.X && item._rightUpPoint.X >= _leftDownPoint.X))
-                               //)) ||
-                               //(_rightDownPoint.Y <= item._rightUpPoint.Y && _rightDownPoint.Y >= item._leftDownPoint.Y &&
-                               //(_rightDownPoint.X <= item._rightUpPoint.X && _rightDownPoint.X >= item._leftDownPoint.X ||
-                               //item._rightDownPoint.X <= _rightUpPoint.Y && item._rightDownPoint.X >= _leftDownPoint.X))
+                            hasCollision = ((_rightDownPoint.Y <= item._rightUpPoint.Y && _rightDownPoint.Y >= item._rightDownPoint.Y &&
+                              _rightUpPoint.X <= item._rightUpPoint.X && _rightUpPoint.X >= item._leftDownPoint.X ^
+                              item._rightDownPoint.X <= _rightUpPoint.Y && item._rightDownPoint.X >= _leftDownPoint.X
+                             ))
+                                 ^
+                               (item._rightDownPoint.Y <= _rightUpPoint.Y && item._rightDownPoint.Y >= _leftDownPoint.Y &&
+                               (_rightDownPoint.X <= item._rightUpPoint.X && _rightDownPoint.X >= item._leftDownPoint.X ||
+                               item._rightDownPoint.X <= _rightUpPoint.Y && item._rightDownPoint.X >= _leftDownPoint.X))
                                ? true : hasCollision;
-                            if (hasCollision)
+                            Console.WriteLine("\n{0}|{1}\nX:{2} Y:{3}    X:{4} Y:{5}|X:{6} Y:{7}    X:{8} Y:{9}\nX:{10} Y:{11}    X:{12} Y:{13}|X:{14} Y:{15}    X:{16} Y:{17}",
+                                MainPrefabEntity._myEntity.Name,
+                                item.MainPrefabEntity._myEntity.Name,
+                                _leftUpPoint.X, _leftUpPoint.Y,
+                                _rightUpPoint.X, _rightUpPoint.Y,
+                                item._leftUpPoint.X, item._leftUpPoint.Y,
+                                item._rightUpPoint.X, item._rightUpPoint.Y,
+                                 _leftDownPoint.X, _leftDownPoint.Y,
+                                _rightDownPoint.X, _rightDownPoint.Y,
+                                item._leftDownPoint.X, item._leftDownPoint.Y,
+                                item._rightDownPoint.X, item._rightDownPoint.Y
+                                );
+                            //hasCollision = (MainPrefabEntity.GetComponent<Transform>() as Transform).Position.Y - (MainPrefabEntity.GetComponent<Transform>() as Transform).Scale.Y / 2
+                            //     < (item.MainPrefabEntity.GetComponent<Transform>() as Transform).Position.Y + (item.MainPrefabEntity.GetComponent<Transform>() as Transform).Scale.Y / 2 ? true : hasCollision;
                             {
                                 Console.WriteLine("Down");
                             }

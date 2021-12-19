@@ -17,7 +17,7 @@ namespace ITBOX
        
         public override void Update()
         {
-            (MainPrefab.GetComponent<Transform>() as Transform).Position += new Vector3(0, 0, 0);
+            (MainPrefab.GetComponent<Transform>() as Transform).Position += new Vector3(0.01f, 0, 0);
             base.Update();
         }
     }

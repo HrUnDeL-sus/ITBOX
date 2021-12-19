@@ -24,17 +24,18 @@ namespace ITBOX
 
                 if (BoxCollider != null)
                 {
+                   
                     float deltaX = _position.X - value.X;
                     float deltaY = _position.Y - value.Y;
-                    if (deltaX != 0)
-                        BoxCollider.UpdateBoxCollider(new Vector2(value.X, _position.Y));
+              //      if(deltaX!=0)
+                //    BoxCollider.UpdateBoxCollider(new Vector2(value.X, _position.Y));
                     if ((deltaX > 0 && BoxCollider.HasCollision(Collision.Left))
                     || (deltaX < 0 && BoxCollider.HasCollision(Collision.Right)))
                     {
                         value.X = _position.X;
                     }
-                    if(deltaY!=0)
-                        BoxCollider.UpdateBoxCollider(new Vector2(_position.X, value.Y));
+                //    if (deltaY != 0)
+                  //      BoxCollider.UpdateBoxCollider(new Vector2(_position.X, value.Y));
                     if ((deltaY < 0 && BoxCollider.HasCollision(Collision.Up))
                       || (deltaY > 0 && BoxCollider.HasCollision(Collision.Down)))
                     {
@@ -44,7 +45,7 @@ namespace ITBOX
                     
                 }     
                 _position = value;
-          //      MainPrefabEntity?.UpdateBoxCollider();
+                MainPrefabEntity?.UpdateBoxCollider();
 
             }
         }
