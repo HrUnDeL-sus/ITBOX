@@ -8,6 +8,6 @@ uniform sampler2D maintexture;
 void
 main()
 {
-	vec2 flipped_texcoord = vec2(f_texcoord.x, f_texcoord.y);
+#	vec2 flipped_texcoord = vec2(f_texcoord.x, f_texcoord.y);
     outputColor = vec4(1,1,1,1);
 }

@@ -12,7 +12,7 @@ namespace ITBOX
   public sealed class Entity
     {
         public readonly string Name;
-        private const float SIZE = 1f;
+        private const float SIZE = 0.5f;
         public  Entity(string name)
         {
           
@@ -24,17 +24,17 @@ namespace ITBOX
         {
           return  new int[] {
               
-                 0, 1, 3,3, 1, 2
+                 0, 2, 1,0, 3, 2
             };
         }
         public  Vector3[] GetVertex()
         {
             return new Vector3[] {
             
-                new Vector3( SIZE,  SIZE, 0.0f),
-                new Vector3( SIZE, -SIZE, 0.0f),
-                new Vector3(-SIZE, -SIZE, 0.0f),
-                new Vector3(-SIZE,  SIZE, 0.0f)
+                new Vector3( -SIZE,  -SIZE,0),
+                new Vector3( SIZE, -SIZE, 0),
+                new Vector3(SIZE, SIZE, 0),
+                new Vector3(-SIZE,  SIZE, 0)
             };
         }
         public Vector2[] GetTexVertex()

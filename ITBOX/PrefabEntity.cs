@@ -132,7 +132,7 @@ namespace ITBOX
            
             GL.UniformMatrix4(GL.GetUniformLocation(MapManager.GetShader(0).Handle, "all"), false, ref result);
              
-            GL.DrawElements(BeginMode.TriangleStrip, _myEntity.GetIndices().Length, DrawElementsType.UnsignedInt, 0);
+            GL.DrawElements(BeginMode.Triangles, _myEntity.GetIndices().Length, DrawElementsType.UnsignedInt, 0);
            GL.DisableVertexAttribArray(0);
             GL.DisableVertexAttribArray(GL.GetAttribLocation(MapManager.GetShader(0).Handle, "texcoord"));
         }

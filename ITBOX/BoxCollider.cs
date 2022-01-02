@@ -19,32 +19,62 @@ namespace ITBOX
         NotChange,
         Change
     }
+    public enum PositionPoint
+    {
+        Up,
+        Down,
+        Left,
+        Right
+    }
   public  class BoxCollider:Component
     {
         public static List<BoxCollider> AllBoxColliders = new List<BoxCollider>();
         public StateChangeSizeCollider StateChangeSize { get; private set; }
       
-        struct Point
+        class Point
         {
            public float X { get; private set; }
            public float Y { get; private set; }
-            public void MathPosition(Vector2 Position,Vector2 Size,bool IsDown,bool IsLeft)
+            public void MathPosition(Transform transform, PositionPoint positionPoint)
             {
-                 X =IsLeft ? Position.X - Size.X/2: Position.X + Size.X / 2;
-                Y = IsDown ? Position.Y - Size.Y/2 : Position.Y + Size.Y/2;
+                Vector2 Position = new Vector2(transform.Position.X, transform.Position.Y);
+                Vector2 Size =new Vector2(transform.Scale.X, transform.Scale.Y);
+                switch (positionPoint)
+                {
+                    case PositionPoint.Up:
+                        Y =Position.Y + Size.Y / 3;
+                        X = Position.X;
+                        break;
+                    case PositionPoint.Down:
+                        Y = Position.Y - Size.Y / 3;
+                        X = Position.X;
+                        break;
+                    case PositionPoint.Left:
+                        X =Position.X - Size.X / 3;
+                        Y = Position.Y;
+                        break;
+                    case PositionPoint.Right:
+                        X = Position.X + Size.X / 3;
+                        Y = Position.Y;
+                        break;
+                    default:
+                        break;
+                }
+               
+               
                 RoundXY();
             }
             private void RoundXY()
             {
-                X = (float)Math.Round(X, 2);
-                Y = (float)Math.Round(Y, 2);
+                //X = (float)Math.Round(X, 2);
+                //Y = (float)Math.Round(Y, 2);
             }
         }
         public  Vector2 Size { get; private set; }
-        private Point _leftUpPoint;
-        private Point _rightUpPoint;
-        private Point _leftDownPoint;
-        private Point _rightDownPoint;
+        private Point _upPoint=new Point();
+        private Point _downPoint = new Point();
+        private Point _rightPoint = new Point();
+        private Point _leftPoint = new Point();
         public BoxCollider()
         {
             StateChangeSize = StateChangeSizeCollider.NotChange;
@@ -67,25 +97,10 @@ namespace ITBOX
                     switch (collision)
                     {
                         case Collision.Left:
-                            //hasCollision = 
-                            //    (_leftUpPoint.X <= item._rightUpPoint.X && _leftUpPoint.X >= item._leftUpPoint.X &&
-                            //    _leftUpPoint.Y <= item._rightUpPoint.Y && _leftUpPoint.Y >= item._leftDownPoint.Y) ||
-                            //    (_leftDownPoint.X <= item._rightUpPoint.X && _leftDownPoint.X >= item._leftUpPoint.X &&
-                            //    _leftDownPoint.Y <= item._rightUpPoint.Y && _leftDownPoint.Y >= item._leftDownPoint.Y) ? true : hasCollision;
-                            hasCollision =
-                              (_leftUpPoint.X < item._rightUpPoint.X && _leftUpPoint.X > item._leftUpPoint.X
-                              &&
-                              ((_leftUpPoint.Y < item._rightUpPoint.Y && _leftUpPoint.Y > item._leftDownPoint.Y)
-                              ||
-                              (item._leftUpPoint.Y < _rightUpPoint.Y && item._leftUpPoint.Y > _leftDownPoint.Y)
-                              ))
-                              ||
-                              (_leftDownPoint.X < item._rightUpPoint.X && _leftDownPoint.X > item._leftUpPoint.X
-                              &&
-                              ((_leftDownPoint.Y < item._rightUpPoint.Y && _leftDownPoint.Y > item._leftDownPoint.Y)
-                              ||
-                              (item._leftDownPoint.Y < _rightUpPoint.Y && item._leftDownPoint.Y > _leftDownPoint.Y)
-                              )) ? true : hasCollision;
+                            hasCollision = _leftPoint.X < item._rightPoint.X && _leftPoint.X > item._leftPoint.X;
+                                //&&
+                                // ((_upPoint.Y > item._downPoint.Y && _upPoint.Y < item._upPoint.Y) ||
+                                // (_downPoint.Y > item._downPoint.Y && _downPoint.Y < item._upPoint.Y))
                             if (hasCollision)
                             {
                                 Console.WriteLine("Left");
@@ -93,21 +108,11 @@ namespace ITBOX
                             break;
                             
                         case Collision.Right:
-                            hasCollision = 
-                               
-                               (_rightUpPoint.X < item._rightUpPoint.X && _rightUpPoint.X > item._leftUpPoint.X 
-                               &&
-                               ((_rightUpPoint.Y < item._rightUpPoint.Y && _rightUpPoint.Y > item._leftDownPoint.Y)
-                               ||
-                               (item._rightUpPoint.Y < _rightUpPoint.Y && item._rightUpPoint.Y > _leftDownPoint.Y)
-                               )) 
-                               ||
-                               (_rightDownPoint.X < item._rightUpPoint.X && _rightDownPoint.X > item._leftUpPoint.X 
-                               &&
-                               ((_rightDownPoint.Y < item._rightUpPoint.Y && _rightDownPoint.Y > item._leftDownPoint.Y)
-                               ||
-                               (item._rightDownPoint.Y < _rightUpPoint.Y && item._rightDownPoint.Y > _leftDownPoint.Y)
-                               )) ? true : hasCollision;
+                            hasCollision = _rightPoint.X < item._rightPoint.X && _rightPoint.X > item._leftPoint.X;
+                                //(((_upPoint.Y > item._downPoint.Y && _upPoint.Y < item._upPoint.Y) ||
+                                //(_downPoint.Y > item._downPoint.Y && _downPoint.Y < item._upPoint.Y))||
+                                //((item._upPoint.Y > _downPoint.Y && item._upPoint.Y < _upPoint.Y) ||
+                                //(item._downPoint.Y > _downPoint.Y && item._downPoint.Y < _upPoint.Y)))
                             if (hasCollision)
                             {
                                 Console.WriteLine("Right");
@@ -115,40 +120,14 @@ namespace ITBOX
                             break;
                               
                         case Collision.Up:
-                            hasCollision = (_rightUpPoint.Y <= item._rightUpPoint.Y && _rightUpPoint.Y >= item._leftDownPoint.Y&&
-                              (_rightUpPoint.X <= item._rightUpPoint.X && _rightUpPoint.X >= item._leftDownPoint.X
-                              ||
-                              item._rightUpPoint.X <= _rightUpPoint.X && item._rightUpPoint.X >= _leftDownPoint.X
-                              )) ? true : hasCollision;
                             if (hasCollision)
                             {
                                 Console.WriteLine("Up");
                             }
                             break;
                         case Collision.Down:
-                            hasCollision = ((_rightDownPoint.Y <= item._rightUpPoint.Y && _rightDownPoint.Y >= item._rightDownPoint.Y &&
-                              _rightUpPoint.X <= item._rightUpPoint.X && _rightUpPoint.X >= item._leftDownPoint.X ^
-                              item._rightDownPoint.X <= _rightUpPoint.Y && item._rightDownPoint.X >= _leftDownPoint.X
-                             ))
-                                 ^
-                               (item._rightDownPoint.Y <= _rightUpPoint.Y && item._rightDownPoint.Y >= _leftDownPoint.Y &&
-                               (_rightDownPoint.X <= item._rightUpPoint.X && _rightDownPoint.X >= item._leftDownPoint.X ||
-                               item._rightDownPoint.X <= _rightUpPoint.Y && item._rightDownPoint.X >= _leftDownPoint.X))
-                               ? true : hasCollision;
-                            Console.WriteLine("\n{0}|{1}\nX:{2} Y:{3}    X:{4} Y:{5}|X:{6} Y:{7}    X:{8} Y:{9}\nX:{10} Y:{11}    X:{12} Y:{13}|X:{14} Y:{15}    X:{16} Y:{17}",
-                                MainPrefabEntity._myEntity.Name,
-                                item.MainPrefabEntity._myEntity.Name,
-                                _leftUpPoint.X, _leftUpPoint.Y,
-                                _rightUpPoint.X, _rightUpPoint.Y,
-                                item._leftUpPoint.X, item._leftUpPoint.Y,
-                                item._rightUpPoint.X, item._rightUpPoint.Y,
-                                 _leftDownPoint.X, _leftDownPoint.Y,
-                                _rightDownPoint.X, _rightDownPoint.Y,
-                                item._leftDownPoint.X, item._leftDownPoint.Y,
-                                item._rightDownPoint.X, item._rightDownPoint.Y
-                                );
-                            //hasCollision = (MainPrefabEntity.GetComponent<Transform>() as Transform).Position.Y - (MainPrefabEntity.GetComponent<Transform>() as Transform).Scale.Y / 2
-                            //     < (item.MainPrefabEntity.GetComponent<Transform>() as Transform).Position.Y + (item.MainPrefabEntity.GetComponent<Transform>() as Transform).Scale.Y / 2 ? true : hasCollision;
+                           
+                            if(hasCollision)
                             {
                                 Console.WriteLine("Down");
                             }
@@ -163,10 +142,11 @@ namespace ITBOX
         
         public void UpdateBoxCollider(Vector2 Position)
         {
-            _leftUpPoint.MathPosition(Position, Size, false, true);
-            _rightUpPoint.MathPosition(Position, Size, false, false);
-            _leftDownPoint.MathPosition(Position, Size, true, true);
-            _rightDownPoint.MathPosition(Position, Size, true, false);
+            Transform transform = MainPrefabEntity.GetComponent<Transform>();
+            _leftPoint.MathPosition(transform, PositionPoint.Left);
+            _rightPoint.MathPosition(transform, PositionPoint.Right);
+            _downPoint.MathPosition(transform, PositionPoint.Down);
+            _upPoint.MathPosition(transform, PositionPoint.Up);
 
         }
     }
