@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using OpenTK;
 namespace ITBOX
 {
-  public  class Camera
+  public sealed class Camera
     {
         private float _size;
         public Matrix4 GetOrthoMatrix()

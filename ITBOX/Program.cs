@@ -4,15 +4,13 @@ using System.IO;
 using OpenTK;
 namespace ITBOX
 {
-    class Program
+  public sealed class Program
     {
        
         static void Main(string[] args)
         {
-            using (var window =new ItBoxWindow())
-            {
-                window.Run(60, 60);
-            }
+            var window = new ItBoxWindow();
+            window.Run(60, 60);
         }
     }
 }

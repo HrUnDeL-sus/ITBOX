@@ -9,19 +9,38 @@ using System.Threading.Tasks;
 
 namespace ITBOX
 {
- public sealed class Shader
+ public sealed class Shader:IDisposable
     {
         private int _handle;
         private int _vertexShader;
         private int _fragmentShader;
+        private bool disposedValue = false;
         public Shader(string vertexPath, string fragmentPath)
         {
             GenerateShader(ShaderType.VertexShader, vertexPath, out _vertexShader);
             GenerateShader(ShaderType.FragmentShader, fragmentPath, out _fragmentShader);
+            CreateProgram();
+        }  
+        public void CreateProgram()
+        {
             _handle = GL.CreateProgram();
             GL.AttachShader(_handle, _vertexShader);
             GL.AttachShader(_handle, _fragmentShader);
             GL.LinkProgram(_handle);
+        }
+        public void DeleteProgram()
+        {
+                GL.DeleteProgram(_handle);
+        }
+        public void Dispose()
+        {
+          
+            GC.SuppressFinalize(this);
+        }
+       
+        public int GetUniform(string name)
+        {
+            return GL.GetUniformLocation(_handle, name);
         }
         public void SetUniform4(Matrix4 matrix,string name)
         {
@@ -29,6 +48,7 @@ namespace ITBOX
 
             GL.UniformMatrix4(location, true, ref matrix);
         }
+        
         public void Use()
         {
             GL.UseProgram(_handle);
