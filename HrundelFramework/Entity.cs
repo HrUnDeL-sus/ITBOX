@@ -5,8 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
-
-namespace ITBOX
+using System.Reflection;
+namespace HrundelFramework
 {
  public  abstract class Entity
     {
@@ -27,12 +27,21 @@ namespace ITBOX
         public virtual Vector2 Position { get => _position; protected set => _position = value; }
         public virtual float Rotate { get => _rotate; protected set => _rotate = value; }
         public virtual Vector2 Scale { get => _scale; protected set => _scale = value; }
-        
+        public readonly string Name;
       
         public Entity()
         {
             GenBuffersAndGetShader();
-            
+            Name ="entity"+DateTime.Now.ToBinary();
+            foreach (var item in Assembly.Load("ITBOX").GetTypes())
+            {
+                Console.WriteLine("s:"+item.Name);
+            }
+        }
+        public Entity(string name)
+        {
+            GenBuffersAndGetShader();
+            Name = name;
         }
         protected void SetColor(double r,double g,double b)
         {
@@ -96,7 +105,7 @@ namespace ITBOX
         }
         public virtual void Load()
         {
-
+           
         }
         
     }

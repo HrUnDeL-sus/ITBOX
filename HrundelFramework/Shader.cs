@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ITBOX
+namespace HrundelFramework
 {
  public sealed class Shader:IDisposable
     {
