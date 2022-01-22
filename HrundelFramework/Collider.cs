@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace HrundelFramework
 {
-    public struct Line
+    internal struct Line
     {
        public Vector2 Position { get; private set; }
         public float X { get; private set; }
@@ -82,7 +82,7 @@ namespace HrundelFramework
             throw new NotImplementedException();
         }
     }
-    public class Collider
+    internal class Collider
     {
         public bool IsVisible { get; set; }
         public Line UpLine { get;private set; }

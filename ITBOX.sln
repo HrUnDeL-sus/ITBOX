@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.31424.327
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HrundelFramework", "HrundelFramework\HrundelFramework.csproj", "{F58D5642-243C-4DAA-9103-B8E1FAD0ED4D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapEditor", "MapEditor\MapEditor.csproj", "{49986E6C-E43D-4478-B564-485DDA73A4B1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ITBOX_GAME", "ITBOX_GAME\ITBOX_GAME.csproj", "{DB02C68A-BD95-4FD9-BD1A-729AB82724F8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{F58D5642-243C-4DAA-9103-B8E1FAD0ED4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F58D5642-243C-4DAA-9103-B8E1FAD0ED4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F58D5642-243C-4DAA-9103-B8E1FAD0ED4D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{49986E6C-E43D-4478-B564-485DDA73A4B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{49986E6C-E43D-4478-B564-485DDA73A4B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{49986E6C-E43D-4478-B564-485DDA73A4B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{49986E6C-E43D-4478-B564-485DDA73A4B1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB02C68A-BD95-4FD9-BD1A-729AB82724F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB02C68A-BD95-4FD9-BD1A-729AB82724F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB02C68A-BD95-4FD9-BD1A-729AB82724F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB02C68A-BD95-4FD9-BD1A-729AB82724F8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
