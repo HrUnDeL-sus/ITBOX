@@ -74,6 +74,7 @@ namespace HrundelFramework
         public Entity()
         {
             Name = DateTime.Now.ToBinary().ToString();
+          
         }
         internal void ChangeProperties(EntityProperties entityProperties)
         {
@@ -109,11 +110,9 @@ namespace HrundelFramework
         {
                 LateUpdate();
             _myShader.CreateProgram();
-            _vertexBufferObject = GL.GenBuffer();
-            _elementBufferObject = GL.GenBuffer();
-            _vertexArrayObject = GL.GenVertexArray();
-            GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferObject);
-            GL.BindVertexArray(_vertexArrayObject);
+            GL.Enable(EnableCap.Blend);
+         
+            GL.BindVertexArray(_vertexBufferObject);
             GL.BufferData(BufferTarget.ArrayBuffer, GetVertices().Length * sizeof(float), GetVertices(), BufferUsageHint.StaticDraw);
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, _elementBufferObject);
             GL.BufferData(BufferTarget.ElementArrayBuffer, _indices.Length * sizeof(uint), _indices, BufferUsageHint.StaticDraw);
@@ -121,7 +120,7 @@ namespace HrundelFramework
             GL.EnableVertexAttribArray(0);
             _myShader.Use();
             int id = _myShader.GetUniform("ourColor");
-            GL.Uniform4(id,_color.R, _color.G, _color.B, _color.B);
+            GL.Uniform4(id,_color.R, _color.G, _color.B, _color.A);
             _myShader.SetUniform4(orthoMatrix,"ortho");
             Matrix4 transform = Matrix4.CreateScale(_scale.X, _scale.Y, 0) * Matrix4.CreateRotationZ(MathHelper.DegreesToRadians(_rotate)) * Matrix4.CreateTranslation(new Vector3(_position.X, _position.Y, 0))*orthoMatrix;
             _myShader.SetUniform4(transform, "transform");
@@ -140,6 +139,10 @@ namespace HrundelFramework
         public virtual void Load()
         {
             GenBuffersAndGetShader();
+            _vertexBufferObject = GL.GenBuffer();
+            _elementBufferObject = GL.GenBuffer();
+            _vertexArrayObject = GL.GenVertexArray();
+            GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferObject);
         }
         internal void Load(Map map)
         {

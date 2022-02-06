@@ -8,6 +8,8 @@ namespace ITBOX_GAME
 {
     class Platform:SolidEntity
     {
+        private float z;
+
         public override void Load()
         {
           
@@ -15,8 +17,12 @@ namespace ITBOX_GAME
         }
         public override void Update()
         {
-          
+            Random random = new Random();
+              Position += new Vector2(MathF.Sin((float)random.NextDouble() - 0.5f), MathF.Sin((float)random.NextDouble()-0.5f));
+      //      Position += new Vector2(0,0.1f);
             base.Update();
         }
+
+        
     }
 }

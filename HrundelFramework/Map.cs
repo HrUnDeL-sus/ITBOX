@@ -58,6 +58,7 @@ namespace HrundelFramework
                 entity.Rendering(_mainCamera.GetOrthoMatrix());
                
             }
+   
         }
     }
 }
