@@ -13,10 +13,7 @@ namespace HrundelFramework
 {
     public struct ColorF
     {
-        //private float _r;
-        //private float _g;
-        //private float _b;
-        //private float _a;
+      
         public float R;
         public float G;
         public float B;
