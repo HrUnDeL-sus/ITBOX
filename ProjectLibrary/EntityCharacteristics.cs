@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Text;
-
+using OpenTK.Graphics;
 namespace ProjectLibrary
 {
     [Serializable]
@@ -12,7 +12,8 @@ namespace ProjectLibrary
     {
         public TypeEntity MyType { get; set; }
 
-        public ColorF MyColor { get; set; }
+        public Color4 MyColor { get; set; }
+        public readonly string Name;
         private Shader _myShader=null;
         private float POSITION_VERTICES = 0.5f;
         private uint[] _indices = {
@@ -22,11 +23,9 @@ namespace ProjectLibrary
         private int _vertexBufferObject;
         private int _vertexArrayObject;
         private int _elementBufferObject;
-        public readonly string Name;
         public EntityCharacteristics(string name)
         {
             Name = name;
-          
             _myShader = new Shader("shader.vert", "shader.frag");
           
         }

@@ -9,6 +9,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\ResourseLibrary\ResourseLibrary.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="shader.frag">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

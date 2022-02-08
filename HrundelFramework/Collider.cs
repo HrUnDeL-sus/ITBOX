@@ -128,6 +128,27 @@ namespace HrundelFramework
                     return false;
             }
         }
+        public bool HasCollision(Side side, Collider otherCollider)
+        {
+            switch (side)
+            {
+                case Side.Left:
+                    return ((UpLine < otherCollider.UpLine && UpLine > otherCollider.DownLine) || (otherCollider.UpLine < UpLine && otherCollider.UpLine > DownLine)) &&
+                        ((RightLine > otherCollider.LeftLine && RightLine < otherCollider.RightLine) || RightLine == otherCollider.LeftLine);
+                case Side.Right:
+                    return  ((UpLine < otherCollider.UpLine && UpLine > otherCollider.DownLine) || (otherCollider.UpLine < UpLine && otherCollider.UpLine > DownLine)) &&
+                         ((LeftLine < otherCollider.RightLine && LeftLine > otherCollider.LeftLine) || LeftLine == otherCollider.RightLine);
+
+                case Side.Up:
+                    return  ((LeftLine < otherCollider.RightLine && LeftLine > otherCollider.LeftLine) || (otherCollider.LeftLine < RightLine && otherCollider.LeftLine > LeftLine)) &&
+                       ((DownLine < otherCollider.UpLine && DownLine > otherCollider.DownLine) || (DownLine == otherCollider.UpLine));
+                case Side.Down:
+                    return ((LeftLine < otherCollider.RightLine && LeftLine > otherCollider.LeftLine) || (otherCollider.LeftLine < RightLine && otherCollider.LeftLine > LeftLine)) &&
+                      ((UpLine > otherCollider.DownLine && UpLine < otherCollider.UpLine) || (UpLine == otherCollider.DownLine));
+                default:
+                    return false;
+            }
+        }
         public void UpdatePosition(Vector2 position, Vector2 size)
         {
             if (!_hasLine)

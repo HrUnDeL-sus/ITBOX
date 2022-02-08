@@ -12,11 +12,13 @@ namespace HrundelFramework
     {
         private Collider _collider = new Collider();
         protected bool IsCollision { get; private set; }
-      
+        public SolidEntity(string descriptionEntityName) : base(descriptionEntityName)
+        {
 
+        }
         public SolidEntity()
         {
-            
+
         }
         public override void Load()
         {
@@ -48,6 +50,7 @@ namespace HrundelFramework
                 List<Entity> collisionEntities = new List<Entity>();
                 Vector2 startPos = base.Position;
                 Vector2 endPos =value;
+                
                 //if (Name == "Player")
                 //{
                 //    Console.WriteLine("{6}\nOffsetSub:{0}  {1}\nOffsetSub2:{2}  {3}\nOffset:{4}  {5}\n", offsetSub.X, offsetSub.Y, offsetSub2.X, offsetSub2.Y, offset.X, offset.Y, Name);
@@ -63,7 +66,7 @@ namespace HrundelFramework
                         if (otherSolidEntity is PhysicalEntity && !(this is PhysicalEntity))
                         {
                             base.Position = value;
-                            return;
+                            break;
                         }
                         _collider.UpdatePosition(startPos, base.Scale);
                         if (_collider.HasCollision(Side.Up, otherCollider, offset))
@@ -73,7 +76,7 @@ namespace HrundelFramework
                                 startPos.Y = otherCollider.UpLine.Y + Scale.Y / 2;
                             value = startPos;
                             base.Position = value;
-                            return;
+                            break;
                         }
                      else   if (_collider.HasCollision(Side.Down, otherCollider, offset))
                         {
@@ -82,7 +85,7 @@ namespace HrundelFramework
                                 startPos.Y = otherCollider.DownLine.Y - Scale.Y / 2;
                             value = startPos;
                             base.Position = value;
-                            return;
+                            break;
                         }
                         else if (_collider.HasCollision(Side.Right, otherCollider, offset))
                         {
@@ -91,7 +94,7 @@ namespace HrundelFramework
                                 startPos.X = otherCollider.LeftLine.X - Scale.X / 2;
                             value = startPos;
                             base.Position = startPos;
-                            return;
+                            break;
                         }
                       else  if (_collider.HasCollision(Side.Left, otherCollider, offset))
                         {
@@ -101,9 +104,11 @@ namespace HrundelFramework
 
                             value = startPos;
                             base.Position = value;
-                            return;
+                            break;
                         }
                     }
+                    if (IsCollision)
+                        break;
                     if (offset.Y != 0&& MathF.Abs(startPos.Y - endPos.Y) > offsetSub2.Y)
                         startPos.Y += offset.Y > 0 ? -offsetSub.Y : offsetSub.Y;
 
@@ -113,7 +118,12 @@ namespace HrundelFramework
                 value = startPos;
                 base.Position = value;
                 foreach (var otherSolidEntity in MapManager.GetLoadingMap().FindEntityTypeInRadius<SolidEntity>(value, 10))
-                    collisionEntities.Add(otherSolidEntity);
+                {
+                    if(_collider.HasCollision(Side.Up, otherSolidEntity._collider)|| _collider.HasCollision(Side.Down, otherSolidEntity._collider)|| _collider.HasCollision(Side.Left, otherSolidEntity._collider) || _collider.HasCollision(Side.Right, otherSolidEntity._collider))
+                        collisionEntities.Add(otherSolidEntity);
+                }
+                    
+                    
                 if (this is ICollider)
                     ((ICollider)this).CollisionHasOccurred(collisionEntities);
             }

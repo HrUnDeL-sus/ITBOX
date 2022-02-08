@@ -30,7 +30,7 @@ namespace MapEditor
         public MainWindow()
         {
             InitializeComponent();
-            TypeEntity typeEntity = TypeEntity.Physic;
+            TypeEntity typeEntity = TypeEntity.PhysicalEntity;
             foreach (var item in Enum.GetValues(typeEntity.GetType()))
             {
                 ComboBoxItem comboBoxItem = new ComboBoxItem();
@@ -60,7 +60,7 @@ namespace MapEditor
             {
                 foreach (var pref in _mainProject.Scenes[_selectedSceneName].PrefabEntities)
                 {
-                    if (!_mainProject.EntitiesCharacteristics.ContainsKey(pref.Value.MyEntityCharacteristics.Name)|| pref.Value.MyEntityCharacteristics==null)
+                    if (!_mainProject.EntitiesCharacteristics.ContainsValue(pref.Value.MyEntityCharacteristics)|| pref.Value.MyEntityCharacteristics==null)
                     {
                         DeletePrefab(pref.Key);
                         continue;
@@ -210,7 +210,7 @@ namespace MapEditor
             RColor.Text = _mainProject.EntitiesCharacteristics[_entityCharacteristicsForRendering].MyColor.R.ToString().Replace(',','.');
             GColor.Text = _mainProject.EntitiesCharacteristics[_entityCharacteristicsForRendering].MyColor.G.ToString().Replace(',', '.');
             BColor.Text = _mainProject.EntitiesCharacteristics[_entityCharacteristicsForRendering].MyColor.B.ToString().Replace(',', '.');
-            NameEntityTextBox.Text = _mainProject.EntitiesCharacteristics[_entityCharacteristicsForRendering].Name;
+            NameEntityTextBox.Text = _entityCharacteristicsForRendering;
             EntityTypeComboBox.SelectedIndex = (int)_mainProject.EntitiesCharacteristics[_entityCharacteristicsForRendering].MyType;
             EntityGLControl.Invalidate();
 
@@ -220,10 +220,10 @@ namespace MapEditor
         {
             try
             {
-                ColorF colorF = new ColorF(float.Parse(RColor.Text.Replace('.',',')), float.Parse(GColor.Text.Replace('.', ',')), float.Parse(BColor.Text.Replace('.', ',')),1);
+                Color4 colorF = new Color4(float.Parse(RColor.Text.Replace('.',',')), float.Parse(GColor.Text.Replace('.', ',')), float.Parse(BColor.Text.Replace('.', ',')),1);
                
                 _mainProject.EntitiesCharacteristics[_entityCharacteristicsForRendering].MyColor=colorF;
-                TypeEntity typeEntity=TypeEntity.Solid;
+                TypeEntity typeEntity=TypeEntity.SolidEntity;
                _mainProject.EntitiesCharacteristics[_entityCharacteristicsForRendering].MyType= (TypeEntity)Enum.Parse(typeEntity.GetType(),(EntityTypeComboBox.SelectedItem as ComboBoxItem).Content.ToString());
                 EntityGLControl.Invalidate();
             }
@@ -274,7 +274,7 @@ namespace MapEditor
         {
             try
             {
-                PrefabEntity prefabEntity = new PrefabEntity(namePref, entityCharacteristics);
+                PrefabEntity prefabEntity = new PrefabEntity(entityCharacteristics);
                 _mainProject.Scenes[_selectedSceneName].PrefabEntities.Add(namePref, prefabEntity);
                 AddPrefabToPanel(namePref);
             }
@@ -410,6 +410,16 @@ namespace MapEditor
             _entityCharacteristicsForRendering = "";
             DeleteEntity(NameEntityTextBox.Text);
            
+        }
+
+        private void ExportFileButton_Click(object sender, RoutedEventArgs e)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Hrundel game resources |*.hgr";
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                _mainProject.SaveToResourse(saveFileDialog.FileName);
+            }
         }
     }
 }

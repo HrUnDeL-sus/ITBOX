@@ -8,7 +8,12 @@ namespace ITBOX_GAME
 {
     class Player:PhysicalEntity,ICollider
     {
-        private float speed=3;
+       
+        private float speed=2;
+        public Player() : base("player")
+        {
+
+        }
         public override void Load()
         {
             Gravity = 2f;
@@ -16,17 +21,19 @@ namespace ITBOX_GAME
         }
         void ICollider.CollisionHasOccurred(List<Entity> entities)
         {
-            
-           
+            if (entities.Count >= 1 && (entities[0] is Platform))
+                (entities[0] as Platform).Push();
+
+
         }
         public override void Update()
         {
             if (KeyManager.KeyPressed(Key.D))
             {
-                Position += new Vector2(1, 0);
+                Position += new Vector2(0.5f, 0);
             }else if (KeyManager.KeyPressed(Key.A))
             {
-                Position -= new Vector2(1, 0);
+                Position -= new Vector2(0.5f, 0);
             }
             if (KeyManager.KeyPressed(Key.Add))
             {

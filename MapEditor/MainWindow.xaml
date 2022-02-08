@@ -15,8 +15,9 @@
         </Grid.RowDefinitions>
         <Menu Grid.Row="0">
             <MenuItem Header="Файл">
-                <Button Content="Открыть" x:Name="LoadFileButton" Click="LoadFileButton_Click"/>
                 <Button Content="Сохранить" x:Name="SaveFileButton" Click="SaveFileButton_Click"/>
+                <Button Content="Экпортировать" x:Name="ExportFileButton" Click="ExportFileButton_Click"/>
+                <Button Content="Открыть" x:Name="LoadFileButton" Click="LoadFileButton_Click"/>
             </MenuItem>
         </Menu>
         <StackPanel Grid.Row="1">

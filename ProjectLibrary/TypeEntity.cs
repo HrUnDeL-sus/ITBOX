@@ -2,7 +2,7 @@
 {
     public enum TypeEntity
     {
-        Solid,
-        Physic
+        SolidEntity,
+        PhysicalEntity
     }
 }

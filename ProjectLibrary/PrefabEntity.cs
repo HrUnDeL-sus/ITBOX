@@ -10,10 +10,9 @@ namespace ProjectLibrary
         public Vector2 Position { get; set; }
         public Vector2 Scale { get; set; }
         public EntityCharacteristics MyEntityCharacteristics { get; private set; }
-        private string _name;
-        public PrefabEntity(string name,EntityCharacteristics entityCharacteristics)
+      
+        public PrefabEntity(EntityCharacteristics entityCharacteristics)
         {
-            _name = name;
             MyEntityCharacteristics = entityCharacteristics;
             Position = Vector2.Zero;
             Scale = Vector2.One;

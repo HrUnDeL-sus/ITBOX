@@ -14,6 +14,14 @@ namespace HrundelFramework
         {
             _impulseVector = imulse;
         }
+        public PhysicalEntity(string descriptionEntityName) : base(descriptionEntityName)
+        {
+
+        }
+        public PhysicalEntity()
+        {
+
+        }
         public override void LateUpdate()
         {  
             if(_impulseVector.Y==0)

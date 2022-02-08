@@ -8,7 +8,7 @@ using OpenTK.Graphics.OpenGL;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
-
+using ResourseLibrary;
 namespace HrundelFramework
 {
     public struct ColorF
@@ -33,13 +33,11 @@ namespace HrundelFramework
         public readonly Vector2 Position;
         public readonly Vector2 Scale;
         public readonly string Name;
-        public readonly ColorF Color;
-        public EntityProperties(Vector2 position,Vector2 scale,string name, ColorF color)
+        public EntityProperties(Vector2 position,Vector2 scale,string name)
         {
             Position = position;
             Name = name;
             Scale = scale;
-            Color = color;
         }
     }
  public  abstract class Entity
@@ -68,17 +66,25 @@ namespace HrundelFramework
         public string Name { get; private set; }
         protected Map MyMap { get; private set; }
 
-        public Entity()
+        public Entity(string descriptionEntityName)
         {
-            Name = DateTime.Now.ToBinary().ToString();
           
+          DescriptionEntity descriptionEntity= MapManager.LoadedResourse.DescriptionEntities[descriptionEntityName];
+            Name = descriptionEntity.Name;
+            Color = new ColorF(descriptionEntity.MyColor.R, descriptionEntity.MyColor.G, descriptionEntity.MyColor.B, descriptionEntity.MyColor.A);
+            MapManager.AddEntity(this);
         }
+       public Entity()
+        {
+
+        }
+        
         internal void ChangeProperties(EntityProperties entityProperties)
         {
             Position = entityProperties.Position;
             Scale = entityProperties.Scale;
             Name = entityProperties.Name;
-            Color = entityProperties.Color;
+          
         }
 
        
