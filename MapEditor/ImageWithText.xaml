@@ -1,0 +1,13 @@
+﻿<UserControl x:Class="MapEditor.ImageWithText"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MapEditor"
+             mc:Ignorable="d" 
+             d:DesignHeight="100" d:DesignWidth="100">
+    <StackPanel x:Name="MainStackPanel" Background="AntiqueWhite">
+        <Image Name="MainImage" Height="80"/>
+        <TextBlock x:Name="ImageTextBlock" Text="Test"/>
+    </StackPanel>
+</UserControl>

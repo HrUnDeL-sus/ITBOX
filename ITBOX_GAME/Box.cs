@@ -6,7 +6,7 @@ using HrundelFramework.Input;
 using OpenTK;
 namespace ITBOX_GAME
 {
-    class Box:PhysicalEntity
+    class Box:SolidEntity
     {
         public Box() : base("enemy")
         {

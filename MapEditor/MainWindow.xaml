@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:MapEditor"
         xmlns:opentk="clr-namespace:OpenTK;assembly=OpenTK.GLControl"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" ResizeMode="NoResize">
+        Title="MainWindow" Height="450" Width="800" ResizeMode="NoResize" Closing="Window_Closing">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="25*"/>
@@ -45,10 +45,10 @@
                         <TextBlock Text="Префабы:"/>
                         <ScrollViewer Height="222">
                             <StackPanel x:Name="PrefabsStackPanel">
-                                
+
                             </StackPanel>
                         </ScrollViewer>
-                       
+
                         <Button Content="Добавить префаб" Name="AddPrefabButton" Click="AddPrefabButton_Click"/>
                         <Button Content="Удалить префаб" Name="DeletePrefabButton" Click="DeletePrefabButton_Click"/>
                     </StackPanel>
@@ -94,9 +94,32 @@
                             <Button Content="Удалить сущность" Name="DeleteEntityButton" Click="DeleteEntityButton_Click"/>
                         </StackPanel>
                     </StackPanel>
-                    <WindowsFormsHost Name="WindowsFormsHostEntity" Grid.Column="1" Initialized="WindowsFormsHostEntity_Initialized" Width="290" Height="290">
-                        <opentk:GLControl x:Name="EntityGLControl" Load="EntityGLControl_Load" Paint="EntityGLControl_Paint"/>
-                    </WindowsFormsHost>
+                    <Grid Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="29*"/>
+                            <RowDefinition Height="20*"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="5*"/>
+                            <ColumnDefinition Width="13*"/>
+                        </Grid.ColumnDefinitions>
+                        <WindowsFormsHost Name="WindowsFormsHostEntity"  Initialized="WindowsFormsHostEntity_Initialized"  Grid.Row="0" Grid.ColumnSpan="2" Margin="83,0,0,0">
+                            <opentk:GLControl x:Name="EntityGLControl" Load="EntityGLControl_Load" Paint="EntityGLControl_Paint"/>
+                        </WindowsFormsHost>
+                        <ScrollViewer>
+                            <StackPanel x:Name="AnimationsStackPanel" Orientation="Vertical" />
+                        </ScrollViewer>
+                        <StackPanel Grid.Row="1">
+                            <Button x:Name="FrameOrAnimationAddButton" Content="Добавить кадр" FontSize="8" Click="FrameOrAnimationAddButton_Click"/>
+                            <Button x:Name="FrameOrAnimationDeleteButton" Content="Удалить кадр" FontSize="8" Click="FrameOrAnimationDeleteButton_Click"/>
+                            <CheckBox x:Name="FramewCheckBox" Content="Кадры" FontSize="9" IsChecked="True" Click="FramewCheckBox_Click"/>
+                            <TextBlock x:Name="SelectedAnimationTextBlock" FontSize="9"/>
+                        </StackPanel>
+                        <ScrollViewer HorizontalScrollBarVisibility="Visible" Grid.Row="1" VerticalScrollBarVisibility="Disabled" Grid.Column="2">
+                            <StackPanel Orientation="Horizontal" Name="SpriteStackPanel"/>
+                        </ScrollViewer>
+                    </Grid>
+
                     <StackPanel Orientation="Vertical" Grid.Column="2">
                         <TextBlock Text="Сущность:"/>
                         <TextBlock  x:Name="NameEntityTextBox"/>
@@ -117,6 +140,32 @@
                         <Button Content="Сохранить изменения" Name="SaveEntitySettingsButton" Click="SaveEntitySettingsButton_Click"/>
                     </StackPanel>
                 </Grid>
+            </TabItem>
+            <TabItem Header="Ресурсы">
+                <StackPanel>
+                    <Button Content="Обновить ресурсы" Name="UpdateResourceButton" Click="UpdateResourceButton_Click"/>
+                    <TabControl>
+                    <TabItem Header="Спрайты">
+                        <Grid Height="252">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="12*"/>
+                                <RowDefinition Height="121*"/>
+                            </Grid.RowDefinitions>
+                            <WrapPanel Orientation="Horizontal" Grid.Row="0">
+                                <Button Content="Добавить спрайт" Name="AddSpriteButton" Click="AddSpriteButton_Click"/>
+                                <Button Content="Удалить спрайт" Name="DeleteSpriteButton" Click="DeleteSpriteButton_Click"/>
+
+                            </WrapPanel>
+
+                            <ScrollViewer Grid.Row="1">
+                                <WrapPanel Name="ResourceSpriteWrapPanel">
+
+                                </WrapPanel>
+                            </ScrollViewer>
+                        </Grid>
+                    </TabItem>
+                </TabControl>
+                </StackPanel>
             </TabItem>
         </TabControl>
     </Grid>

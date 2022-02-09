@@ -33,17 +33,7 @@ namespace HrundelFramework
                 return;
             AllEntitiesDictionary.Add(get.Name, get);
         }
-        public static void LoadAllMap()
-        {
-            foreach (var item in Assembly.Load("ITBOX_GAME").GetTypes())
-            {
-               
-                if (item.BaseType.Name == "Map")
-                {                   
-                    AddMap(Activator.CreateInstance(item) as Map);
-                }
-            }
-        }
+       
         public static Map GetMap(string name)
         {
             return _maps.Find((t) => t.Name == name);

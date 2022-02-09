@@ -50,7 +50,7 @@ namespace ITBOX_GAME
             new Player();
             
             MapManager.LoadAllMaps();
-           MapManager.SetCurrentMap("level1");
+           MapManager.SetCurrentMap("test");
           
         }
     }

@@ -41,7 +41,12 @@ namespace ProjectLibrary
        
         public int GetUniform(string name)
         {
+           
             return GL.GetUniformLocation(_handle, name);
+        }
+        public int GetAttribLocation(string attr)
+        {
+            return GL.GetAttribLocation(_handle, attr);
         }
         public void SetUniform4(Matrix4 matrix,string name)
         {
@@ -66,7 +71,7 @@ namespace ProjectLibrary
             GL.CompileShader(_vertexId);
             string infoLogVert = GL.GetShaderInfoLog(_vertexId);
             if (infoLogVert != string.Empty)
-                Console.WriteLine(infoLogVert);
+                throw new Exception(infoLogVert);
         }
     }
 }

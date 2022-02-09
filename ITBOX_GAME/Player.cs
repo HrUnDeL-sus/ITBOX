@@ -28,7 +28,11 @@ namespace ITBOX_GAME
         }
         public override void Update()
         {
-            if (KeyManager.KeyPressed(Key.D))
+            if (KeyManager.KeyPressed(Key.E))
+            {
+                MapManager.SetCurrentMap("level2");
+            }
+                if (KeyManager.KeyPressed(Key.D))
             {
                 Position += new Vector2(0.5f, 0);
             }else if (KeyManager.KeyPressed(Key.A))

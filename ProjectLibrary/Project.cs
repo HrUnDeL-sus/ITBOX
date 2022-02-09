@@ -13,6 +13,7 @@ namespace ProjectLibrary
        
         public Dictionary<string,EntityCharacteristics> EntitiesCharacteristics = new Dictionary<string, EntityCharacteristics>();
         public Dictionary<string, Scene> Scenes = new Dictionary<string, Scene>();
+        public Dictionary<string, ResourceSprite> ResourceSprites = new Dictionary<string, ResourceSprite>();
         public void Save(string path)
         {
             BinaryFormatter formatter = new BinaryFormatter();

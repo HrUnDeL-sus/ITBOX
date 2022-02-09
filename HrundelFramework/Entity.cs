@@ -76,7 +76,7 @@ namespace HrundelFramework
         }
        public Entity()
         {
-
+            
         }
         
         internal void ChangeProperties(EntityProperties entityProperties)
@@ -95,8 +95,8 @@ namespace HrundelFramework
         }
         public void Clear()
         {
-            GL.DeleteBuffer(_vertexArrayObject);
-            GL.DeleteBuffer(_elementBufferObject);
+         //   GL.DeleteBuffer(_vertexArrayObject);
+        //    GL.DeleteBuffer(_elementBufferObject);
             _myShader.DeleteProgram();
         }
         public virtual float[] GetVertices()
@@ -116,7 +116,7 @@ namespace HrundelFramework
             GL.Enable(EnableCap.Blend);
          
             GL.BindVertexArray(_vertexBufferObject);
-            GL.BufferData(BufferTarget.ArrayBuffer, GetVertices().Length * sizeof(float), GetVertices(), BufferUsageHint.StaticDraw);
+           
             GL.BindBuffer(BufferTarget.ElementArrayBuffer, _elementBufferObject);
             GL.BufferData(BufferTarget.ElementArrayBuffer, _indices.Length * sizeof(uint), _indices, BufferUsageHint.StaticDraw);
             GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 3 * sizeof(float), 0);
@@ -142,10 +142,12 @@ namespace HrundelFramework
         public virtual void Load()
         {
             GenBuffersAndGetShader();
+        
             _vertexBufferObject = GL.GenBuffer();
             _elementBufferObject = GL.GenBuffer();
             _vertexArrayObject = GL.GenVertexArray();
             GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferObject);
+            GL.BufferData(BufferTarget.ArrayBuffer, GetVertices().Length * sizeof(float), GetVertices(), BufferUsageHint.StaticDraw);
         }
         internal void Load(Map map)
         {
