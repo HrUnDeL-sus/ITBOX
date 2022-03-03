@@ -60,6 +60,8 @@ namespace ProjectLibrary
             _vertexBufferObject = GL.GenBuffer();
             _elementBufferObject = GL.GenBuffer();
             _vertexArrayObject = GL.GenVertexArray();
+            GL.BlendFunc(BlendingFactor.SrcAlpha,BlendingFactor.OneMinusSrcAlpha);
+            GL.Enable(EnableCap.Blend);
             if (MyAnimator != null && MyAnimator.Animations.ContainsKey(MyAnimator.SelectedAnimation) && MyAnimator.Animations[MyAnimator.SelectedAnimation].Sprites.ContainsKey(MyAnimator.Animations[MyAnimator.SelectedAnimation].SelectedSprite))
             {
                 _myShaderTex.CreateProgram();

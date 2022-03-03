@@ -7,7 +7,7 @@ namespace ProjectLibrary
     [Serializable]
     public class Sprite
     {
-        public readonly ResourceSprite MainSprite;
+        public ResourceSprite MainSprite;
         public Sprite(ResourceSprite mainSprite)
         {
             MainSprite = mainSprite;

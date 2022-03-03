@@ -36,10 +36,11 @@ namespace MapEditor
             Animation
         }
         private Project _mainProject = new Project();
+        private List<Stream> _resourseImageStreams = new List<Stream>();
         private string _entityCharacteristicsForRendering = "";
         private string _selectedSceneName = "";
         private string _selectedImage = "";
-        private List<Stream> _activeStreams = new List<Stream>();
+        private string _saveFilePath = "";
         public MainWindow()
         {
             InitializeComponent();
@@ -54,8 +55,7 @@ namespace MapEditor
         private ImageSource ByteToImage(string path)
         {
             BitmapImage biImg = new BitmapImage();
-            var myBitmap = new System.Drawing.Bitmap(path);
-          
+            ImageSource imgSrc;
             using (Stream ms = File.OpenRead(path))
             {
                 FileInfo fileInfo = new FileInfo(path);
@@ -66,21 +66,10 @@ namespace MapEditor
                 biImg.BeginInit();
                 biImg.StreamSource = ms2;
                 biImg.EndInit();
-                ImageSource imgSrc = biImg;
-                _activeStreams.Add(ms2);
-                return imgSrc;
+                _resourseImageStreams.Add(ms2);
+                imgSrc = biImg;
             }
-           
-           
-           
-            //   myBitmap.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
-            
-          
-
-
-
-
-
+            return imgSrc;
         }
         private void AddObjectToPanel(ObjectProject objectProject, object[] args)
         {
@@ -102,7 +91,7 @@ namespace MapEditor
                     SceneGLControl.Invalidate();
                     break;
                 case ObjectProject.ResourseSprite:
-                    var myBitmap = new System.Drawing.Bitmap(args[1].ToString());
+                
                     ImageSource src = ByteToImage(args[1].ToString());
                     ImageWithText imageWithText = new ImageWithText(args[0].ToString(), src);
                     imageWithText.MouseDown += ImageWithText_MouseDown;
@@ -277,19 +266,28 @@ namespace MapEditor
                     case ObjectProject.ResourseSprite:
                         //0-name
                         //1-path
-                        var myBitmap = new System.Drawing.Bitmap(args[1].ToString());
-                        var pixels = new List<byte>(4 * myBitmap.Width * myBitmap.Height);
-                        for (int y = 0; y < myBitmap.Height; y++)
+                        using (var myBitmap = new System.Drawing.Bitmap(args[1].ToString()))
                         {
-                            for (int x = 0; x < myBitmap.Width; x++)
+                            var pixels = new List<byte>(4 * myBitmap.Width * myBitmap.Height);
+                            for (int y = 0; y < myBitmap.Height; y++)
                             {
-                                pixels.Add(myBitmap.GetPixel(x, y).R);
-                                pixels.Add(myBitmap.GetPixel(x, y).G);
-                                pixels.Add(myBitmap.GetPixel(x, y).B);
-                                pixels.Add(myBitmap.GetPixel(x, y).A);
+                                for (int x = 0; x < myBitmap.Width; x++)
+                                {
+                                    pixels.Add(myBitmap.GetPixel(x, y).R);
+                                    pixels.Add(myBitmap.GetPixel(x, y).G);
+                                    pixels.Add(myBitmap.GetPixel(x, y).B);
+                                    pixels.Add(myBitmap.GetPixel(x, y).A);
+                                }
                             }
+                            if (_mainProject.ResourceSprites.ContainsKey(args[0].ToString()))
+                            {
+                                _mainProject.ResourceSprites[args[0].ToString()].ArraySprite = pixels.ToArray();
+                                _mainProject.ResourceSprites[args[0].ToString()].Height = myBitmap.Height;
+                                _mainProject.ResourceSprites[args[0].ToString()].Width = myBitmap.Width;
+                            }
+                            else
+                            _mainProject.ResourceSprites.Add(args[0].ToString(), new ResourceSprite(args[1].ToString(), pixels.ToArray(), args[0].ToString(), myBitmap.Height, myBitmap.Width));
                         }
-                        _mainProject.ResourceSprites.Add(args[0].ToString(), new ResourceSprite(args[1].ToString(), pixels.ToArray(), args[0].ToString(), myBitmap.Height, myBitmap.Width));
                         break;
                     case ObjectProject.Animation:
                         //0-name
@@ -542,6 +540,7 @@ namespace MapEditor
             if (saveFileDialog.ShowDialog() == true)
             {
                 _mainProject.Save(saveFileDialog.FileName);
+                _saveFilePath = saveFileDialog.FileName;
             }
         }
 
@@ -551,10 +550,7 @@ namespace MapEditor
             openFileDialog.Filter = "Universal hrundel project |*.uhp";
             if (openFileDialog.ShowDialog() == true)
             {
-                foreach (var item in _activeStreams)
-                {
-                    item.Close();
-                }
+               
                 foreach (var sprite in Directory.GetFiles(Directory.GetCurrentDirectory() + @"\"))
                 {
                     FileInfo fileInfo = new FileInfo(sprite);
@@ -572,7 +568,9 @@ namespace MapEditor
                     AddObjectToPanel(ObjectProject.Entity, new object[] { entity.Key });
                 foreach (var entity in _mainProject.ResourceSprites)
                     AddObjectToPanel(ObjectProject.ResourseSprite, new object[] { entity.Key, entity.Value.Path });
-                
+                _saveFilePath = openFileDialog.FileName;
+
+
             }
         }
        
@@ -732,24 +730,30 @@ namespace MapEditor
         private void UpdateResourceButton_Click(object sender, RoutedEventArgs e)
         {
             ResourceSpriteWrapPanel.Children.Clear();
-            foreach (var item in _activeStreams)
-            {
+            foreach (var item in _resourseImageStreams)
                 item.Close();
-            }
-            foreach (var entity in _mainProject.ResourceSprites)
-                AddObjectToPanel(ObjectProject.ResourseSprite, new object[] { entity.Key, entity.Value.Path });
+                for (int i = 0; i < _mainProject.ResourceSprites.Count; i++)
+                    AddObjectToProject(ObjectProject.ResourseSprite, new object[] { _mainProject.ResourceSprites.ElementAt(i).Key, _mainProject.ResourceSprites.ElementAt(i).Value.Path });
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            foreach (var item in _activeStreams)
+            if (_saveFilePath != "")
             {
-                item.Close();
+                UpdateResourceButton_Click(null, null);
+                _mainProject.Save(_saveFilePath);
             }
-            foreach (var sprite in Directory.GetFiles(Directory.GetCurrentDirectory()+@"\"))
+
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            foreach (var item in _resourseImageStreams)
+                item.Close();
+            foreach (var sprite in Directory.GetFiles(Directory.GetCurrentDirectory() + @"\"))
             {
                 FileInfo fileInfo = new FileInfo(sprite);
-                if(fileInfo.Extension==".png")
+                if (fileInfo.Extension == ".png")
                     File.Delete(sprite);
             }
         }
