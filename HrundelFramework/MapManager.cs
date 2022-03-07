@@ -9,22 +9,16 @@ namespace HrundelFramework
 {
     public static class MapManager
     {
-        private static Shader _shader=null;
         private static Map _currentMap = null;
         private static List<Map> _maps = new List<Map>();
         internal static Dictionary<string, Entity> AllEntitiesDictionary { get; private set; }
         internal static Resourse LoadedResourse { get; private set; }
-       
-      public static Map GetLoadingMap()
+
+        public static Map GetLoadingMap()
         {
                 return _currentMap;
         }
-        public static Shader GetShader()
-        {
-            return _shader;
-            
-        }
-        internal static void AddEntity(Entity get)
+        public static void AddEntity(Entity get)
         {
             
             if (AllEntitiesDictionary == null)
@@ -33,7 +27,7 @@ namespace HrundelFramework
                 return;
             AllEntitiesDictionary.Add(get.Name, get);
         }
-       
+
         public static Map GetMap(string name)
         {
             return _maps.Find((t) => t.Name == name);
@@ -56,8 +50,7 @@ namespace HrundelFramework
         }
         public static void SetCurrentMap(string name)
         {
-            if (_shader == null)
-                _shader = new Shader("shader.vert", "shader.frag");
+           
             _currentMap = _maps.Find((t) => t.Name == name);
            
             foreach (var item in _currentMap.GetEntities())
@@ -73,8 +66,8 @@ namespace HrundelFramework
             else
                 Console.WriteLine("Пустая карта");
         }
-       
-        internal static void AddMap(Map map)
+
+        public static void AddMap(Map map)
         {
             _maps.Add(map);
         }

@@ -12,6 +12,7 @@ namespace ResourseLibrary
     {
         public Dictionary<string,DescriptionMap> DescriptionMaps = new Dictionary<string, DescriptionMap>();
         public Dictionary<string, DescriptionEntity> DescriptionEntities = new Dictionary<string, DescriptionEntity>();
+        public Dictionary<string,DescriptionResourseSprite> DescriptionResourseSprites = new Dictionary<string,DescriptionResourseSprite>();
         public void Save(string path)
         {
             BinaryFormatter formatter = new BinaryFormatter();

@@ -43,8 +43,6 @@ namespace HrundelFramework
  public  abstract class Entity
     {
         private Shader _myShader;
-      
-       
         private float POSITION_VERTICES = 0.5f;
         private 
         uint[] _indices = {
@@ -65,14 +63,33 @@ namespace HrundelFramework
         public virtual ColorF Color { get => _color; protected set => _color = value; }
         public string Name { get; private set; }
         protected Map MyMap { get; private set; }
+        protected readonly Animator MyAnimator;
 
         public Entity(string descriptionEntityName)
         {
-          
           DescriptionEntity descriptionEntity= MapManager.LoadedResourse.DescriptionEntities[descriptionEntityName];
+           
+           
+            MyAnimator = GenerateAnimator(descriptionEntity);
             Name = descriptionEntity.Name;
             Color = new ColorF(descriptionEntity.MyColor.R, descriptionEntity.MyColor.G, descriptionEntity.MyColor.B, descriptionEntity.MyColor.A);
             MapManager.AddEntity(this);
+        }
+        private Animator GenerateAnimator(DescriptionEntity descriptionEntity)
+        {
+            Dictionary<string, Animation> animations = new Dictionary<string, Animation>();
+            if (descriptionEntity.MyAnimator.Animations == null)
+                return new Animator(animations);
+            foreach (var animation in descriptionEntity.MyAnimator.Animations)
+            {
+                List<Sprite> _sprites = new List<Sprite>();
+                foreach (var sprite in animation.Value.DescriptionSprites)
+                {
+                    _sprites.Add(new Sprite(sprite));
+                }
+                animations.Add(animation.Key, new Animation(_sprites.ToArray()));
+            }
+            return new Animator(animations);
         }
        public Entity()
         {
@@ -88,15 +105,23 @@ namespace HrundelFramework
         }
 
        
-        private void GenBuffersAndGetShader()
+        private void GenBuffers()
         {
-            _myShader = new Shader("shader.vert", "shader.frag");
+            _vertexBufferObject = GL.GenBuffer();
+            _elementBufferObject = GL.GenBuffer();
+            _vertexArrayObject = GL.GenVertexArray();
+            GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferObject);
+            GL.BufferData(BufferTarget.ArrayBuffer, GetVertices().Length * sizeof(float), GetVertices(), BufferUsageHint.StaticDraw);
+            GL.BindVertexArray(_vertexBufferObject);
+            GL.BindBuffer(BufferTarget.ElementArrayBuffer, _elementBufferObject);
+            GL.BufferData(BufferTarget.ElementArrayBuffer, _indices.Length * sizeof(uint), _indices, BufferUsageHint.StaticDraw);
+           
           
         }
         public void Clear()
         {
-         //   GL.DeleteBuffer(_vertexArrayObject);
-        //    GL.DeleteBuffer(_elementBufferObject);
+            GL.DeleteBuffer(_vertexArrayObject);
+           GL.DeleteBuffer(_elementBufferObject);
             _myShader.DeleteProgram();
         }
         public virtual float[] GetVertices()
@@ -113,41 +138,32 @@ namespace HrundelFramework
         {
                 LateUpdate();
             _myShader.CreateProgram();
-            GL.Enable(EnableCap.Blend);
-         
-            GL.BindVertexArray(_vertexBufferObject);
-           
-            GL.BindBuffer(BufferTarget.ElementArrayBuffer, _elementBufferObject);
-            GL.BufferData(BufferTarget.ElementArrayBuffer, _indices.Length * sizeof(uint), _indices, BufferUsageHint.StaticDraw);
+            GenBuffers();
             GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 3 * sizeof(float), 0);
             GL.EnableVertexAttribArray(0);
+            if (_myShader.Type == GlobalShaderType.Textured)
+                MyAnimator.Rendering();
             _myShader.Use();
-            int id = _myShader.GetUniform("ourColor");
-            GL.Uniform4(id,_color.R, _color.G, _color.B, _color.A);
+       //     int id = _myShader.GetUniform("ourColor");
+        //    GL.Uniform4(id,_color.R, _color.G, _color.B, _color.A);
             _myShader.SetUniform4(orthoMatrix,"ortho");
             Matrix4 transform = Matrix4.CreateScale(_scale.X, _scale.Y, 0) * Matrix4.CreateRotationZ(MathHelper.DegreesToRadians(_rotate)) * Matrix4.CreateTranslation(new Vector3(_position.X, _position.Y, 0))*orthoMatrix;
             _myShader.SetUniform4(transform, "transform");
             GL.DrawElements(PrimitiveType.Triangles, _indices.Length, DrawElementsType.UnsignedInt, 0);
+            GL.Disable(EnableCap.Blend);
             Clear();
             Update();
         }
         public virtual void Update()
         {
+          
         }
         public virtual void LateUpdate()
         {
-           
-            
         }
         public virtual void Load()
         {
-            GenBuffersAndGetShader();
-        
-            _vertexBufferObject = GL.GenBuffer();
-            _elementBufferObject = GL.GenBuffer();
-            _vertexArrayObject = GL.GenVertexArray();
-            GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferObject);
-            GL.BufferData(BufferTarget.ArrayBuffer, GetVertices().Length * sizeof(float), GetVertices(), BufferUsageHint.StaticDraw);
+            _myShader = new Shader(MyAnimator.HasAnimations ? GlobalShaderType.Textured : GlobalShaderType.Standard);
         }
         internal void Load(Map map)
         {

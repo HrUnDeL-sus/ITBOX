@@ -9,16 +9,35 @@ using System.Threading.Tasks;
 
 namespace HrundelFramework
 {
- public sealed class Shader:IDisposable
+    internal enum GlobalShaderType
+    {
+        Standard,
+        Textured
+    }
+ internal sealed class Shader:IDisposable
     {
         private int _handle;
         private int _vertexShader;
         private int _fragmentShader;
         private bool disposedValue = false;
-        public Shader(string vertexPath, string fragmentPath)
+        public readonly GlobalShaderType Type;
+        public Shader( GlobalShaderType globalShaderType)
         {
-            GenerateShader(ShaderType.VertexShader, vertexPath, out _vertexShader);
-            GenerateShader(ShaderType.FragmentShader, fragmentPath, out _fragmentShader);
+            Type = globalShaderType;
+            switch (Type)
+            {
+                case GlobalShaderType.Standard:
+                    GenerateShader(ShaderType.VertexShader, "shader.vert", out _vertexShader);
+                    GenerateShader(ShaderType.FragmentShader, "shader.frag", out _fragmentShader);
+                    break;
+                case GlobalShaderType.Textured:
+                    GenerateShader(ShaderType.VertexShader, "shaderTex.vert", out _vertexShader);
+                    GenerateShader(ShaderType.FragmentShader, "shaderTex.frag", out _fragmentShader);
+                    break;
+                default:
+                    break;
+            }
+         
             CreateProgram();
         }  
         public void CreateProgram()

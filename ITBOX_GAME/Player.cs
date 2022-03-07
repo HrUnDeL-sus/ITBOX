@@ -16,28 +16,35 @@ namespace ITBOX_GAME
         }
         public override void Load()
         {
-            Gravity = 2f;
+            MyAnimator.Fps = 12;
+            MyAnimator.SelectAnimation("stand");
             base.Load();
         }
         void ICollider.CollisionHasOccurred(List<Entity> entities)
         {
-            if (entities.Count >= 1 && (entities[0] is Platform))
-                (entities[0] as Platform).Push();
-
 
         }
         public override void Update()
         {
-            if (KeyManager.KeyPressed(Key.E))
+
+            if (KeyManager.KeyPressed(Key.D))
             {
-                MapManager.SetCurrentMap("level2");
+                Position += new Vector2(0.1f, 0);
+                MyAnimator.SelectAnimation("run");
             }
-                if (KeyManager.KeyPressed(Key.D))
+            else if (KeyManager.KeyPressed(Key.A))
             {
-                Position += new Vector2(0.5f, 0);
-            }else if (KeyManager.KeyPressed(Key.A))
+                Position -= new Vector2(0.1f, 0);
+                MyAnimator.SelectAnimation("run");
+            }
+            else if(KeyManager.KeyPressed(Key.Space) && IsCollision)
             {
-                Position -= new Vector2(0.5f, 0);
+                AddImpulse(new Vector2(0, 2));
+                MyAnimator.SelectAnimation("stand");
+            }
+            else
+            {
+                MyAnimator.SelectAnimation("stand");
             }
             if (KeyManager.KeyPressed(Key.Add))
             {
@@ -48,10 +55,6 @@ namespace ITBOX_GAME
             {
                 speed--;
                 Console.WriteLine(speed);
-            }
-            if (KeyManager.KeyPressed(Key.Space)&&IsCollision)
-            {
-                AddImpulse(new Vector2(0, speed));
             }
             if (Position.Y < -200)
             {

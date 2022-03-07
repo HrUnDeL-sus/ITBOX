@@ -60,10 +60,11 @@ namespace ProjectLibrary
             _vertexBufferObject = GL.GenBuffer();
             _elementBufferObject = GL.GenBuffer();
             _vertexArrayObject = GL.GenVertexArray();
-            GL.BlendFunc(BlendingFactor.SrcAlpha,BlendingFactor.OneMinusSrcAlpha);
-            GL.Enable(EnableCap.Blend);
+          
             if (MyAnimator != null && MyAnimator.Animations.ContainsKey(MyAnimator.SelectedAnimation) && MyAnimator.Animations[MyAnimator.SelectedAnimation].Sprites.ContainsKey(MyAnimator.Animations[MyAnimator.SelectedAnimation].SelectedSprite))
             {
+                GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+                GL.Enable(EnableCap.Blend);
                 _myShaderTex.CreateProgram();
             }else
                 _myShaderNotTex.CreateProgram();
@@ -77,7 +78,6 @@ namespace ProjectLibrary
             if (MyAnimator != null && MyAnimator.Animations.ContainsKey(MyAnimator.SelectedAnimation)&& MyAnimator.Animations[MyAnimator.SelectedAnimation].Sprites.ContainsKey(MyAnimator.Animations[MyAnimator.SelectedAnimation].SelectedSprite))
             {
                 Animation animation = MyAnimator.Animations[MyAnimator.SelectedAnimation];
-                Sprite sprite = animation.Sprites[animation.SelectedSprite];
                 int texCoordLocation = _myShaderTex.GetAttribLocation("aTexCoord");
                 _vertexBufferObjectTex = GL.GenBuffer();
                 GL.BindBuffer(BufferTarget.ArrayBuffer, _vertexBufferObjectTex);
@@ -85,7 +85,7 @@ namespace ProjectLibrary
                 GL.VertexAttribPointer(1, 2, VertexAttribPointerType.Float, false, 2 * sizeof(float), 0);
                 GL.EnableVertexAttribArray(1);
                 GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.Repeat);              
-                GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, sprite.MainSprite.Width, sprite.MainSprite.Height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, sprite.MainSprite.ArraySprite);
+                GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, animation.Sprites[animation.SelectedSprite].Width, animation.Sprites[animation.SelectedSprite].Height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, animation.Sprites[animation.SelectedSprite].ArraySprite);
                 GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
               
                 _myShaderTex.Use();

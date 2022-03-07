@@ -137,7 +137,7 @@ namespace MapEditor
             foreach (var sprite in _mainProject.EntitiesCharacteristics[NameEntityTextBox.Text].MyAnimator.Animations[SelectedAnimationTextBlock.Text].Sprites)
             {
                
-                AddObjectToPanel(ObjectProject.Sprite, new object[] { sprite.Key, sprite.Value.MainSprite.Name });
+                AddObjectToPanel(ObjectProject.Sprite, new object[] { sprite.Key, sprite.Value.Name });
             }
         }
 
@@ -299,7 +299,7 @@ namespace MapEditor
                     case ObjectProject.Sprite:
                         //0-name
                         //1-nameSprite
-                      _mainProject.EntitiesCharacteristics[NameEntityTextBox.Text].MyAnimator.Animations[SelectedAnimationTextBlock.Text].Sprites.Add(args[0].ToString(),new Sprite(_mainProject.ResourceSprites[args[1].ToString()]));
+                      _mainProject.EntitiesCharacteristics[NameEntityTextBox.Text].MyAnimator.Animations[SelectedAnimationTextBlock.Text].Sprites.Add(args[0].ToString(),_mainProject.ResourceSprites[args[1].ToString()]);
                         break;
                     default:
                         break;
@@ -367,8 +367,8 @@ namespace MapEditor
                     for (int z = 0; z < _mainProject.EntitiesCharacteristics[_entityCharacteristicsForRendering].MyAnimator.Animations.Values.ToArray()[i].Sprites.Count; z++)
                     {
 
-                        Sprite spr = _mainProject.EntitiesCharacteristics[_entityCharacteristicsForRendering].MyAnimator.Animations.Values.ToArray()[i].Sprites.Values.ToArray()[z];
-                        if (!_mainProject.ResourceSprites.ContainsKey(spr.MainSprite.Name))
+                        ResourceSprite spr = _mainProject.EntitiesCharacteristics[_entityCharacteristicsForRendering].MyAnimator.Animations.Values.ToArray()[i].Sprites.Values.ToArray()[z];
+                        if (!_mainProject.ResourceSprites.ContainsKey(spr.Name))
                         {
                             _mainProject.EntitiesCharacteristics[_entityCharacteristicsForRendering].MyAnimator.Animations.Values.ToArray()[i].Sprites.Remove(_mainProject.EntitiesCharacteristics[_entityCharacteristicsForRendering].MyAnimator.Animations.Values.ToArray()[i].Sprites.Keys.ToArray()[z]);
                             if(SelectedAnimationTextBlock.Text== _mainProject.EntitiesCharacteristics[_entityCharacteristicsForRendering].MyAnimator.Animations.Keys.ToArray()[i])

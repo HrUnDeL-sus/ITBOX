@@ -8,6 +8,6 @@ namespace ProjectLibrary
     public class Animation
     {
         public string SelectedSprite = "";
-        public Dictionary<string, Sprite> Sprites = new Dictionary<string, Sprite>();
+        public Dictionary<string, ResourceSprite> Sprites = new Dictionary<string, ResourceSprite>();
     }
 }

@@ -37,15 +37,12 @@ namespace ITBOX_GAME
             GL.ClearColor(0.5f, 0.5f, 0.5f,1);
             GL.Clear(ClearBufferMask.ColorBufferBit);
             MapManager.RenderingMap();
-           
-
             SwapBuffers();
         }
 
         private void WindowItBox_Load(object sender, EventArgs e)
         {
             MapManager.LoadResourses(@"C:\maps\test.hgr");
-            new Box();
             new Platform();
             new Player();
             

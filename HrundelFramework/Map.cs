@@ -63,11 +63,7 @@ namespace HrundelFramework
         internal void Rendering()
         {
             foreach (var entity in _prefabEntities)
-            {
                 entity.Rendering(_mainCamera.GetOrthoMatrix());
-               
-            }
-   
         }
     }
 }
